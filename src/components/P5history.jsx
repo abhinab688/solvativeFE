@@ -1,19 +1,26 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+// import dotenv from 'dotenv';
+
+// dotenv.config()
+
+let url = 'http://localhost:8000'
 
 const P5history = () => {
     const [data, setData] = useState()
-
+    const [page, setPage] = useState(1)
+    const [historyData, setHistoryData] = useState([])
     const route = window.location.href.split('/');
     const id = route[route.length - 2]
     useEffect(() => {
         if (id && id.length > 10) {
-            fetch(`http://localhost:8000/getOne/` + id).then(data => {
+            fetch(url + `/getOne/` + id).then(data => {
                 data = data.json()
                 return data
             })
                 .then(data => {
                     setData(data.data)
+                    setHistoryData(data.data.P5.history.slice((page - 1) * 3, page * 3))
                 })
         }
     }, [id])
@@ -50,8 +57,8 @@ const P5history = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {data.P5.history.map((p5Record, index) => (
-                                <tr key={p5Record.id}>
+                            {historyData.map((p5Record, index) => (
+                                <tr key={index}>
                                     <td>{index + 1}</td>
                                     <td>{p5Record.time}</td>
                                     <td>{p5Record.amount}</td>
@@ -63,11 +70,17 @@ const P5history = () => {
                             ))}
                         </tbody>
                     </table>
+                    {data.P5.history.map((item, index) => {
+                        return (
+                            index % 3 === 0 ?
+                                <button>{index}</button> : ""
+                        )
+                    })}
                 </div>
             }
 
 
-        </div>
+        </div >
     )
 }
 
