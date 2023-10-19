@@ -25,6 +25,10 @@ const P5history = () => {
         }
     }, [id])
 
+    const setPageHandler = (e) => {
+        setPage(e.target.value)
+    }
+
     const deleteButtonHandler = async (e) => {
         const deleteData = data.P5.history[e.target.value]
         const response = await fetch('http://localhost:8000/deleteRewards/' + id, {
@@ -73,7 +77,7 @@ const P5history = () => {
                     {data.P5.history.map((item, index) => {
                         return (
                             index % 3 === 0 ?
-                                <button>{index}</button> : ""
+                                <button onClick={setPageHandler}>{index}</button> : ""
                         )
                     })}
                 </div>
